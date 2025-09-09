@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stock Tracker</title>
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Added Font Awesome for trend icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="app">
+      <!-- Enhanced header with glassmorphism effect -->
+      <header class="header">
+        <div class="header-content">
+          <h1>📊 Stock Tracker</h1>
+          <div class="market-status" id="marketStatus">Market Closed</div>
+        </div>
+        <div class="header-glow"></div>
+      </header>
+
+      <!-- Improved search with icon -->
+      <div class="search-container">
+        <div class="search-wrapper">
+          <span class="search-icon"
+            ><i class="fa-solid fa-magnifying-glass"></i
+          ></span>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search stocks..."
+            class="search-input"
+          />
+        </div>
+      </div>
+
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Loading stock data...</p>
+      </div>
+
+      <div class="error" id="error" style="display: none">
+        <p>⚠️ Please add your Alpha Vantage API key in script.js</p>
+        <p>
+          Get free key at:
+          <a href="https://www.alphavantage.co/support/#api-key" target="_blank"
+            >alphavantage.co</a
+          >
+        </p>
+      </div>
+
+      <!-- Enhanced stats grid with better visual hierarchy -->
+      <div class="stats-section">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+            <div class="stat-content">
+              <div class="stat-value" id="totalStocks">0</div>
+              <div class="stat-label">Total</div>
+            </div>
+          </div>
+          <!-- Updated gainers section to use up arrow and renamed to "Gains" -->
+          <div class="stat-card gainers">
+            <div class="stat-icon"><i class="fa-solid fa-arrow-up"></i></div>
+            <div class="stat-content">
+              <div class="stat-value" id="gainers">0</div>
+              <div class="stat-label">Gains</div>
+            </div>
+          </div>
+          <!-- Updated losers section to use down arrow and renamed to "Losses" -->
+          <div class="stat-card losers">
+            <div class="stat-icon"><i class="fa-solid fa-arrow-down"></i></div>
+            <div class="stat-content">
+              <div class="stat-value" id="losers">0</div>
+              <div class="stat-label">Losses</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stocks-container" id="stocksContainer">
+        <!-- Stock cards will be populated here -->
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

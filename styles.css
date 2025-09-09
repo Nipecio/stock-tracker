@@ -1,0 +1,469 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter",
+    sans-serif;
+  background: #000000;
+  background-image: radial-gradient(
+      circle at 20% 80%,
+      rgba(0, 255, 136, 0.05) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(255, 68, 68, 0.05) 0%,
+      transparent 50%
+    );
+  color: #ffffff;
+  line-height: 1.5;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.app {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+  position: relative;
+}
+
+/* Enhanced header with glassmorphism and glow effects */
+.header {
+  position: relative;
+  text-align: center;
+  padding: 24px 0;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.header-content {
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(20px);
+  background: rgba(26, 26, 26, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.header-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 100px;
+  background: linear-gradient(135deg, #00ff88, #0066ff);
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.1;
+  z-index: 1;
+}
+
+.header h1 {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #00ff88, #00ccff, #ff6b6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+}
+
+.market-status {
+  font-size: 14px;
+  font-weight: 600;
+  color: #888;
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  display: inline-block;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.market-status.open {
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+  border-color: rgba(0, 255, 136, 0.4);
+}
+
+.market-status.closed {
+  box-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
+  border-color: rgba(255, 68, 68, 0.4);
+}
+
+/* Enhanced search with icon and better styling */
+.search-container {
+  margin-bottom: 24px;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  z-index: 2;
+  font-size: 16px;
+  opacity: 0.6;
+}
+
+.search-input {
+  width: 100%;
+  padding: 16px 16px 16px 48px;
+  background: rgba(26, 26, 26, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.search-input:focus {
+  border-color: #00ff88;
+  box-shadow: 0 4px 20px rgba(0, 255, 136, 0.2);
+  transform: translateY(-1px);
+}
+
+.search-input::placeholder {
+  color: #666;
+  font-weight: 400;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top: 3px solid #00ff88;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error {
+  text-align: center;
+  padding: 24px;
+  background: rgba(42, 26, 26, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 68, 68, 0.3);
+  border-radius: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 32px rgba(255, 68, 68, 0.1);
+}
+
+.error a {
+  color: #00ff88;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* Enhanced stats section with better visual hierarchy */
+.stats-section {
+  margin-bottom: 24px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.stat-card {
+  background: rgba(26, 26, 26, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.stat-card.gainers {
+  border-color: rgba(0, 255, 136, 0.3);
+}
+
+.stat-card.losers {
+  border-color: rgba(255, 68, 68, 0.3);
+}
+
+.stat-icon {
+  font-size: 20px;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.gainers .stat-icon {
+  color: #00ff88;
+}
+
+.losers .stat-icon {
+  color: #ff6b6b;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #888;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gainers .stat-value {
+  color: #00ff88;
+}
+
+.losers .stat-value {
+  color: #ff6b6b;
+}
+
+/* Compact grid layout for smaller, more efficient cards */
+.stocks-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  padding-bottom: 24px;
+}
+
+.stock-card {
+  background: rgba(26, 26, 26, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.stock-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.stock-card:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.stock-card:hover::before {
+  opacity: 1;
+}
+
+.stock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.stock-info h3 {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 2px;
+  letter-spacing: -0.3px;
+}
+
+.stock-info .company-name {
+  font-size: 12px;
+  color: #888;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.stock-price {
+  text-align: right;
+}
+
+.current-price {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 4px;
+  letter-spacing: -0.3px;
+}
+
+.price-change {
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
+.price-change i {
+  font-size: 12px;
+}
+
+.price-change.positive {
+  color: #00ff88;
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.price-change.negative {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.2);
+}
+
+.stock-details {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail-item {
+  text-align: center;
+}
+
+.detail-label {
+  font-size: 10px;
+  color: #888;
+  margin-bottom: 2px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.detail-value {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .app {
+    padding: 0 12px;
+  }
+
+  .header h1 {
+    font-size: 28px;
+  }
+
+  .stats-grid {
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .stat-icon {
+    font-size: 18px;
+  }
+
+  .stat-value {
+    font-size: 18px;
+  }
+
+  .stocks-container {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .stock-card {
+    padding: 14px;
+  }
+
+  .stock-details {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-content {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .search-input {
+    padding: 14px 14px 14px 44px;
+  }
+
+  .stock-header {
+    margin-bottom: 10px;
+  }
+
+  .current-price {
+    font-size: 16px;
+  }
+
+  .price-change {
+    font-size: 12px;
+  }
+}
