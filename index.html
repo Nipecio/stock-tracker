@@ -1,38 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <link rel="icon" type="image/png" href="lol.png" />
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Finance Growing</title>
+    <title>Stock Tracker</title>
     <link rel="stylesheet" href="styles.css" />
     <!-- Added Font Awesome for trend icons -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="WeatherScope" />
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="black-translucent"
-    />
-    <meta name="theme-color" content="#202434" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
-
-    <!-- App icons for iOS Home Screen -->
-    <link rel="apple-touch-icon" href="lol.png" />
   </head>
   <body>
     <div class="app">
       <!-- Enhanced header with glassmorphism effect -->
       <header class="header">
         <div class="header-content">
-          <h1>Stock Tracker</h1>
+          <h1><i class="fa-solid fa-arrow-trend-up"> </i> Stock Tracker</h1>
           <div class="market-status" id="marketStatus">Market Closed</div>
         </div>
         <div class="header-glow"></div>
@@ -99,6 +83,58 @@
 
       <div class="stocks-container" id="stocksContainer">
         <!-- Stock cards will be populated here -->
+      </div>
+
+      <!-- Added modal for detailed stock view -->
+      <div class="modal-overlay" id="modalOverlay" style="display: none">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 id="modalTitle">Stock Details</h2>
+            <button class="modal-close" id="modalClose">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="modal-stock-info">
+              <div class="modal-price-section">
+                <div class="modal-current-price" id="modalCurrentPrice">
+                  $0.00
+                </div>
+                <div class="modal-price-change" id="modalPriceChange">
+                  +0.00 (0.00%)
+                </div>
+              </div>
+              <div class="modal-company-name" id="modalCompanyName">
+                Company Name
+              </div>
+            </div>
+
+            <div class="modal-stats-grid">
+              <div class="modal-stat-item">
+                <div class="modal-stat-label">Open</div>
+                <div class="modal-stat-value" id="modalOpen">$0.00</div>
+              </div>
+              <div class="modal-stat-item">
+                <div class="modal-stat-label">High</div>
+                <div class="modal-stat-value" id="modalHigh">$0.00</div>
+              </div>
+              <div class="modal-stat-item">
+                <div class="modal-stat-label">Low</div>
+                <div class="modal-stat-value" id="modalLow">$0.00</div>
+              </div>
+              <div class="modal-stat-item">
+                <div class="modal-stat-label">Volume</div>
+                <div class="modal-stat-value" id="modalVolume">0</div>
+              </div>
+              <div class="modal-stat-item">
+                <div class="modal-stat-label">Previous Close</div>
+                <div class="modal-stat-value" id="modalPrevClose">$0.00</div>
+              </div>
+              <div class="modal-stat-item">
+                <div class="modal-stat-label">Market Cap</div>
+                <div class="modal-stat-value" id="modalMarketCap">N/A</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

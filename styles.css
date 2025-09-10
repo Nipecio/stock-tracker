@@ -44,7 +44,7 @@ body {
   position: relative;
   z-index: 2;
   backdrop-filter: blur(20px);
-
+  border-radius: 20px;
   padding: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
@@ -145,6 +145,41 @@ body {
 .loading {
   text-align: center;
   padding: 60px 20px;
+  position: relative;
+}
+
+/* Enhanced loading message with glowing green effects */
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top: 3px solid #00ff88;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+}
+
+.loading p,
+.loading div {
+  color: #00ff88;
+  font-weight: 700;
+  font-size: 18px;
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+  animation: pulse 2s ease-in-out infinite;
+  margin-top: 16px;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.8;
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+  }
 }
 
 .spinner {
@@ -155,6 +190,7 @@ body {
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 20px;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
 }
 
 @keyframes spin {
@@ -402,6 +438,168 @@ body {
   color: #fff;
 }
 
+/* Added modal styles for detailed stock view */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: rgba(26, 26, 26, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 24px 0 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 24px;
+}
+
+.modal-header h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 28px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.modal-body {
+  padding: 0 24px 24px 24px;
+}
+
+.modal-stock-info {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.modal-current-price {
+  font-size: 48px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
+
+.modal-price-change {
+  font-size: 18px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.modal-price-change.positive {
+  color: #00ff88;
+  background: rgba(0, 255, 136, 0.1);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.modal-price-change.negative {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+  border: 1px solid rgba(255, 107, 107, 0.2);
+}
+
+.modal-company-name {
+  font-size: 16px;
+  color: #888;
+  font-weight: 500;
+}
+
+.modal-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.modal-stat-item {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+
+.modal-stat-label {
+  font-size: 12px;
+  color: #888;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.modal-stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 640px) {
   .app {
     padding: 0 12px;
@@ -440,6 +638,28 @@ body {
   .stock-details {
     grid-template-columns: repeat(2, 1fr);
     gap: 6px;
+  }
+
+  .modal-content {
+    margin: 10px;
+    max-width: none;
+  }
+
+  .modal-current-price {
+    font-size: 36px;
+  }
+
+  .modal-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .modal-header {
+    padding: 20px 20px 0 20px;
+  }
+
+  .modal-body {
+    padding: 0 20px 20px 20px;
   }
 }
 

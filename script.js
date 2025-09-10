@@ -1,5 +1,5 @@
 // Replace with your Finnhub API key (get free at: https://finnhub.io/)
-const API_KEY = "JSN4PH4WVX9QTSAW";
+const API_KEY = "d30bq59r01qnmrsdsb00d30bq59r01qnmrsdsb0g";
 const BASE_URL = "https://finnhub.io/api/v1";
 
 const TOP_STOCKS = [
@@ -130,6 +130,23 @@ document.addEventListener("DOMContentLoaded", () => {
   updateMarketStatus();
   loadStockData();
   setupSearch();
+
+  // Modal event listeners
+  document
+    .getElementById("modalClose")
+    .addEventListener("click", hideStockModal);
+  document.getElementById("modalOverlay").addEventListener("click", (e) => {
+    if (e.target === document.getElementById("modalOverlay")) {
+      hideStockModal();
+    }
+  });
+
+  // Close modal with Escape key
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      hideStockModal();
+    }
+  });
 });
 
 function showError() {
@@ -173,7 +190,7 @@ async function loadStockData() {
     for (let i = 0; i < TOP_STOCKS.length; i += batchSize) {
       const batch = TOP_STOCKS.slice(i, i + batchSize);
 
-      loadingEl.innerHTML = `<div class="loading-spinner"></div><div>Loading stocks... ${loadedCount}/${totalStocks}</div>`;
+      loadingEl.innerHTML = `<div class="loading-spinner"></div><div class="loading-message">Loading stocks... ${loadedCount}/${totalStocks}</div>`;
 
       const promises = batch.map((stock) =>
         fetchStockData(stock.symbol, stock.name)
@@ -301,6 +318,7 @@ function createStockCard(stock) {
 
   const card = document.createElement("div");
   card.className = "stock-card";
+  card.addEventListener("click", () => showStockModal(stock));
 
   card.innerHTML = `
         <div class="stock-header">
@@ -471,4 +489,65 @@ function removePlaceholder(index) {
   if (placeholders[index]) {
     placeholders[index].remove();
   }
+}
+
+function showStockModal(stock) {
+  const modal = document.getElementById("modalOverlay");
+  const isPositive = stock.change >= 0;
+  const arrow = isPositive
+    ? '<i class="fa-solid fa-arrow-trend-up"></i>'
+    : '<i class="fa-solid fa-arrow-trend-down"></i>';
+  const changeClass = isPositive ? "positive" : "negative";
+
+  // Update modal content
+  document.getElementById("modalTitle").textContent = stock.symbol;
+  document.getElementById(
+    "modalCurrentPrice"
+  ).textContent = `$${stock.currentPrice.toFixed(2)}`;
+  document.getElementById("modalPriceChange").innerHTML = `${arrow} ${
+    isPositive ? "+" : ""
+  }${stock.change.toFixed(2)} (${
+    isPositive ? "+" : ""
+  }${stock.changePercent.toFixed(2)}%)`;
+  document.getElementById(
+    "modalPriceChange"
+  ).className = `modal-price-change ${changeClass}`;
+  document.getElementById("modalCompanyName").textContent = stock.name;
+  document.getElementById("modalOpen").textContent = `$${stock.open.toFixed(
+    2
+  )}`;
+  document.getElementById("modalHigh").textContent = `$${stock.high.toFixed(
+    2
+  )}`;
+  document.getElementById("modalLow").textContent = `$${stock.low.toFixed(2)}`;
+  document.getElementById("modalVolume").textContent = formatVolume(
+    stock.volume
+  );
+  document.getElementById(
+    "modalPrevClose"
+  ).textContent = `$${stock.previousClose.toFixed(2)}`;
+
+  // Calculate estimated market cap (mock data)
+  const estimatedShares = Math.floor(Math.random() * 5000000000) + 1000000000;
+  const marketCap = stock.currentPrice * estimatedShares;
+  document.getElementById("modalMarketCap").textContent =
+    formatMarketCap(marketCap);
+
+  modal.style.display = "flex";
+}
+
+function hideStockModal() {
+  const modal = document.getElementById("modalOverlay");
+  modal.style.display = "none";
+}
+
+function formatMarketCap(marketCap) {
+  if (marketCap >= 1000000000000) {
+    return `$${(marketCap / 1000000000000).toFixed(2)}T`;
+  } else if (marketCap >= 1000000000) {
+    return `$${(marketCap / 1000000000).toFixed(2)}B`;
+  } else if (marketCap >= 1000000) {
+    return `$${(marketCap / 1000000).toFixed(2)}M`;
+  }
+  return `$${marketCap.toFixed(0)}`;
 }
