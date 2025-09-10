@@ -1,5 +1,5 @@
 // Replace with your Finnhub API key (get free at: https://finnhub.io/)
-const API_KEY = "d30bq59r01qnmrsdsb00d30bq59r01qnmrsdsb0g";
+const API_KEY = "JSN4PH4WVX9QTSAW";
 const BASE_URL = "https://finnhub.io/api/v1";
 
 const TOP_STOCKS = [
@@ -53,6 +53,58 @@ const TOP_STOCKS = [
   { symbol: "RTX", name: "Raytheon Technologies Corporation" },
   { symbol: "QCOM", name: "QUALCOMM Incorporated" },
   { symbol: "HON", name: "Honeywell International Inc." },
+  { symbol: "UNP", name: "Union Pacific Corporation" },
+  { symbol: "UPS", name: "United Parcel Service Inc." },
+  { symbol: "LOW", name: "Lowe's Companies Inc." },
+  { symbol: "MS", name: "Morgan Stanley" },
+  { symbol: "CAT", name: "Caterpillar Inc." },
+  { symbol: "GS", name: "Goldman Sachs Group Inc." },
+  { symbol: "SPGI", name: "S&P Global Inc." },
+  { symbol: "BLK", name: "BlackRock Inc." },
+  { symbol: "AXP", name: "American Express Company" },
+  { symbol: "DE", name: "Deere & Company" },
+  { symbol: "BKNG", name: "Booking Holdings Inc." },
+  { symbol: "MDT", name: "Medtronic plc" },
+  { symbol: "GILD", name: "Gilead Sciences Inc." },
+  { symbol: "C", name: "Citigroup Inc." },
+  { symbol: "SCHW", name: "Charles Schwab Corporation" },
+  { symbol: "AMT", name: "American Tower Corporation" },
+  { symbol: "SYK", name: "Stryker Corporation" },
+  { symbol: "AMAT", name: "Applied Materials Inc." },
+  { symbol: "ISRG", name: "Intuitive Surgical Inc." },
+  { symbol: "TJX", name: "TJX Companies Inc." },
+  { symbol: "LRCX", name: "Lam Research Corporation" },
+  { symbol: "BSX", name: "Boston Scientific Corporation" },
+  { symbol: "MO", name: "Altria Group Inc." },
+  { symbol: "ZTS", name: "Zoetis Inc." },
+  { symbol: "REGN", name: "Regeneron Pharmaceuticals Inc." },
+  { symbol: "CB", name: "Chubb Limited" },
+  { symbol: "MMC", name: "Marsh & McLennan Companies Inc." },
+  { symbol: "SO", name: "Southern Company" },
+  { symbol: "PGR", name: "Progressive Corporation" },
+  { symbol: "ICE", name: "Intercontinental Exchange Inc." },
+  { symbol: "DUK", name: "Duke Energy Corporation" },
+  { symbol: "FCX", name: "Freeport-McMoRan Inc." },
+  { symbol: "NSC", name: "Norfolk Southern Corporation" },
+  { symbol: "AON", name: "Aon plc" },
+  { symbol: "USB", name: "U.S. Bancorp" },
+  { symbol: "PNC", name: "PNC Financial Services Group Inc." },
+  { symbol: "KLAC", name: "KLA Corporation" },
+  { symbol: "APD", name: "Air Products and Chemicals Inc." },
+  { symbol: "CSX", name: "CSX Corporation" },
+  { symbol: "SNPS", name: "Synopsys Inc." },
+  { symbol: "CDNS", name: "Cadence Design Systems Inc." },
+  { symbol: "MCK", name: "McKesson Corporation" },
+  { symbol: "ORLY", name: "O'Reilly Automotive Inc." },
+  { symbol: "CME", name: "CME Group Inc." },
+  { symbol: "MSI", name: "Motorola Solutions Inc." },
+  { symbol: "ADSK", name: "Autodesk Inc." },
+  { symbol: "ABNB", name: "Airbnb Inc." },
+  { symbol: "NXPI", name: "NXP Semiconductors N.V." },
+  { symbol: "ROP", name: "Roper Technologies Inc." },
+  { symbol: "ROST", name: "Ross Stores Inc." },
+  { symbol: "MCHP", name: "Microchip Technology Incorporated" },
+  { symbol: "CCI", name: "Crown Castle Inc." },
 ];
 
 const stocksData = [];
@@ -111,14 +163,17 @@ async function loadStockData() {
     loadingEl.style.display = "block";
     stocksContainer.innerHTML = "";
 
-    // Load stocks in batches to avoid rate limiting
-    const batchSize = 5;
+    let loadedCount = 0;
+    const totalStocks = TOP_STOCKS.length;
+
+    // Create placeholder cards first for better UX
+    createPlaceholderCards();
+
+    const batchSize = 10; // Increased from 5 to 10
     for (let i = 0; i < TOP_STOCKS.length; i += batchSize) {
       const batch = TOP_STOCKS.slice(i, i + batchSize);
-      console.log(
-        `[v0] Loading batch ${Math.floor(i / batchSize) + 1}, symbols:`,
-        batch.map((s) => s.symbol)
-      );
+
+      loadingEl.innerHTML = `<div class="loading-spinner"></div><div>Loading stocks... ${loadedCount}/${totalStocks}</div>`;
 
       const promises = batch.map((stock) =>
         fetchStockData(stock.symbol, stock.name)
@@ -126,28 +181,32 @@ async function loadStockData() {
       const results = await Promise.allSettled(promises);
 
       results.forEach((result, index) => {
+        const stockIndex = i + index;
         if (result.status === "fulfilled" && result.value) {
           stocksData.push(result.value);
-          console.log(`[v0] Successfully loaded ${result.value.symbol}`);
+          loadedCount++;
+          renderSingleStock(result.value, stockIndex);
         } else {
           console.log(
             `[v0] Failed to load ${batch[index].symbol}:`,
             result.reason
           );
+          loadedCount++;
+          markPlaceholderForRemoval(stockIndex);
         }
       });
 
-      // Add delay between batches to respect rate limits
+      updateStatsFromData();
+
       if (i + batchSize < TOP_STOCKS.length) {
-        console.log("[v0] Waiting 1 second before next batch...");
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 200));
       }
     }
 
+    cleanupPlaceholders();
+
     console.log(`[v0] Total stocks loaded: ${stocksData.length}`);
     filteredStocks = [...stocksData];
-    renderStocks();
-    updateStats();
     loadingEl.style.display = "none";
   } catch (error) {
     console.error("[v0] Error loading stock data:", error);
@@ -311,6 +370,16 @@ function setupSearch() {
   });
 }
 
+function updateStatsFromData() {
+  const total = stocksData.length;
+  const gainers = stocksData.filter((stock) => stock.change > 0).length;
+  const losers = stocksData.filter((stock) => stock.change < 0).length;
+
+  totalStocksEl.textContent = total;
+  gainersEl.textContent = gainers;
+  losersEl.textContent = losers;
+}
+
 function updateStats() {
   const total = filteredStocks.length;
   const gainers = filteredStocks.filter((stock) => stock.change > 0).length;
@@ -327,3 +396,79 @@ setInterval(() => {
     loadStockData();
   }
 }, 10 * 60 * 1000);
+
+function createPlaceholderCards() {
+  stocksContainer.innerHTML = "";
+  for (let i = 0; i < TOP_STOCKS.length; i++) {
+    const placeholder = document.createElement("div");
+    placeholder.className = "stock-card placeholder";
+    placeholder.innerHTML = `
+      <div class="stock-header">
+        <div class="stock-info">
+          <div class="placeholder-text"></div>
+          <div class="placeholder-text small"></div>
+        </div>
+        <div class="stock-price">
+          <div class="placeholder-text"></div>
+          <div class="placeholder-text small"></div>
+        </div>
+      </div>
+      <div class="stock-details">
+        <div class="detail-item">
+          <div class="placeholder-text small"></div>
+          <div class="placeholder-text small"></div>
+        </div>
+        <div class="detail-item">
+          <div class="placeholder-text small"></div>
+          <div class="placeholder-text small"></div>
+        </div>
+        <div class="detail-item">
+          <div class="placeholder-text small"></div>
+          <div class="placeholder-text small"></div>
+        </div>
+        <div class="detail-item">
+          <div class="placeholder-text small"></div>
+          <div class="placeholder-text small"></div>
+        </div>
+      </div>
+    `;
+    stocksContainer.appendChild(placeholder);
+  }
+}
+
+function renderSingleStock(stock, index) {
+  const stockCard = createStockCard(stock);
+  const placeholders = stocksContainer.querySelectorAll(
+    ".placeholder:not(.marked-for-removal)"
+  );
+  if (placeholders[0]) {
+    stocksContainer.replaceChild(stockCard, placeholders[0]);
+  } else {
+    stocksContainer.appendChild(stockCard);
+  }
+}
+
+function markPlaceholderForRemoval(index) {
+  const placeholders = stocksContainer.querySelectorAll(
+    ".placeholder:not(.marked-for-removal)"
+  );
+  if (placeholders[0]) {
+    placeholders[0].classList.add("marked-for-removal");
+    placeholders[0].style.display = "none";
+  }
+}
+
+function cleanupPlaceholders() {
+  const remainingPlaceholders =
+    stocksContainer.querySelectorAll(".placeholder");
+  remainingPlaceholders.forEach((placeholder) => {
+    placeholder.remove();
+  });
+}
+
+function removePlaceholder(index) {
+  const placeholders = stocksContainer.querySelectorAll(".placeholder");
+  if (placeholders[index]) {
+    placeholders[index].remove();
+  }
+}
