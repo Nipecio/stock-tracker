@@ -24,6 +24,12 @@ body {
   overflow-x: hidden;
 }
 
+body.modal-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+}
+
 .app {
   max-width: 100%;
   margin: 0 auto;
@@ -44,6 +50,8 @@ body {
   position: relative;
   z-index: 2;
   backdrop-filter: blur(20px);
+  background: rgba(26, 26, 26, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   padding: 20px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -453,6 +461,7 @@ body {
   justify-content: center;
   padding: 20px;
   animation: fadeIn 0.3s ease;
+  overflow: hidden;
 }
 
 .modal-content {
@@ -463,9 +472,9 @@ body {
   width: 100%;
   max-width: 500px;
   max-height: 90vh;
-  overflow-y: auto;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   animation: slideUp 0.3s ease;
+  overflow: hidden;
 }
 
 .modal-header {
@@ -643,6 +652,7 @@ body {
   .modal-content {
     margin: 10px;
     max-width: none;
+    max-height: calc(100vh - 40px);
   }
 
   .modal-current-price {

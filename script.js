@@ -533,11 +533,13 @@ function showStockModal(stock) {
   document.getElementById("modalMarketCap").textContent =
     formatMarketCap(marketCap);
 
+  document.body.classList.add("modal-open");
   modal.style.display = "flex";
 }
 
 function hideStockModal() {
   const modal = document.getElementById("modalOverlay");
+  document.body.classList.remove("modal-open");
   modal.style.display = "none";
 }
 
